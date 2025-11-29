@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getResult, Dimension } from '@/lib/diagnosis-data';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import AdUnit from './AdUnit';
 
 type Props = {
     score: number;
@@ -30,11 +31,11 @@ export default function Result({ score, dimensionScores, oshiName, onRetry }: Pr
     };
 
     const chartData = [
-        { subject: '時間', A: dimensionScores.time, fullMark: 100 },
-        { subject: '財力', A: dimensionScores.money, fullMark: 150 },
-        { subject: '行動', A: dimensionScores.action, fullMark: 200 },
-        { subject: '布教', A: dimensionScores.evangelism, fullMark: 100 },
-        { subject: 'メンタル', A: dimensionScores.mental, fullMark: 200 },
+        { subject: '時間', A: dimensionScores.time, fullMark: 20 },
+        { subject: '財力', A: dimensionScores.money, fullMark: 20 },
+        { subject: '行動', A: dimensionScores.action, fullMark: 20 },
+        { subject: '布教', A: dimensionScores.evangelism, fullMark: 20 },
+        { subject: 'メンタル', A: dimensionScores.mental, fullMark: 20 },
     ];
 
     return (
@@ -75,7 +76,7 @@ export default function Result({ score, dimensionScores, oshiName, onRetry }: Pr
                     <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
                         <PolarGrid stroke="rgba(255,255,255,0.2)" />
                         <PolarAngleAxis dataKey="subject" tick={{ fill: 'white', fontSize: 12 }} />
-                        <PolarRadiusAxis angle={30} domain={[0, 'auto']} tick={false} axisLine={false} />
+                        <PolarRadiusAxis angle={30} domain={[0, 20]} tick={false} axisLine={false} />
                         <Radar
                             name="My Love"
                             dataKey="A"
@@ -86,6 +87,9 @@ export default function Result({ score, dimensionScores, oshiName, onRetry }: Pr
                     </RadarChart>
                 </ResponsiveContainer>
             </div>
+
+            {/* AdSense Unit */}
+            <AdUnit slot="7202420726" />
 
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '2rem' }}>
                 <button
