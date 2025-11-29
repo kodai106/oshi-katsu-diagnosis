@@ -1,26 +1,37 @@
 import React, { useState } from 'react';
-import { questions } from '@/lib/diagnosis-data';
+import { questions, Dimension } from '@/lib/diagnosis-data';
 
 type Props = {
-    onFinish: (score: number) => void;
+    onFinish: (score: number, dimensionScores: Record<Dimension, number>) => void;
+    oshiName: string;
 };
 
-export default function Quiz({ onFinish }: Props) {
+export default function Quiz({ onFinish, oshiName }: Props) {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [totalScore, setTotalScore] = useState(0);
+    const [dimensionScores, setDimensionScores] = useState<Record<Dimension, number>>({
+        time: 0, money: 0, action: 0, evangelism: 0, mental: 0
+    });
 
     const currentQuestion = questions[currentQuestionIndex];
     const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
     const handleOptionClick = (score: number) => {
-        const newScore = totalScore + score;
+        const newTotalScore = totalScore + score;
+        const newDimensionScores = { ...dimensionScores };
+        newDimensionScores[currentQuestion.dimension] += score;
+
         if (currentQuestionIndex < questions.length - 1) {
-            setTotalScore(newScore);
+            setTotalScore(newTotalScore);
+            setDimensionScores(newDimensionScores);
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
-            onFinish(newScore);
+            onFinish(newTotalScore, newDimensionScores);
         }
     };
+
+    // Replace placeholder with Oshi Name if applicable
+    const questionText = currentQuestion.text.replace('推し', oshiName || '推し');
 
     return (
         <div className="glass-card fade-in">
@@ -35,7 +46,7 @@ export default function Quiz({ onFinish }: Props) {
             </div>
 
             <h2 style={{ fontSize: '1.5rem', marginBottom: '2rem', minHeight: '3.6rem' }}>
-                {currentQuestion.text}
+                {questionText}
             </h2>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -54,7 +65,7 @@ export default function Quiz({ onFinish }: Props) {
                         onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
                         onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
                     >
-                        {option.text}
+                        {option.text.replace('推し', oshiName || '推し')}
                     </button>
                 ))}
             </div>
